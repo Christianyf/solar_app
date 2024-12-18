@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RemoteServicesService } from '../remote-services.service';
-import { Route, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,46 +8,46 @@ import { Route, Router } from '@angular/router';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-
   username: string = '';
   password: string = '';
   errorMessage: string = '';
   isLoading: boolean = false;
-  
-  constructor(private remoteService: RemoteServicesService, private router: Router) { }
 
-  login(event:Event){
-
-  event.preventDefault();//Evitar la recarga de la página
-  this.errorMessage = '';//Reinicia el mensaje de error
-
-  // Verificar que los campos no estén vacíos
-  if (!this.username || !this.password) {
-    this.errorMessage = 'Por favor, completa todos los campos.';
-    return;
-  }
-
-  // Reiniciar mensaje de error y mostrar indicador de carga
-  this.errorMessage = '';
-  this.isLoading = true;
-
-    this.remoteService.login(this.username, this.password).subscribe({
-      next: (response) =>{
-        localStorage.setItem('authToken', response.token);
-        this.router.navigate(['/tabs']);
-      },
-      error: (error) =>{
-        this.errorMessage = 'Credenciales incorrectas';
-      },
-      complete: () =>{
-        console.log('Proceso de autenticación completado')
-      },
-      
-    });
-
-  }
+  constructor(private remoteService: RemoteServicesService, private router: Router) {}
 
   ngOnInit() {
+    // Redirigir si ya hay un token, si se implementa debe tener una validación más fuerte
+/*     const token = localStorage.getItem('authToken');
+    if (token) {
+      this.router.navigate(['/tabs']);
+    } */
   }
 
+  login(event: Event) {
+    event.preventDefault(); // Evita que el formulario recargue la página
+
+    // Validar campos
+    if (!this.username || !this.password) {
+      this.errorMessage = 'Por favor, completa todos los campos.';
+      return;
+    }
+
+    this.errorMessage = ''; // Limpiar mensajes de error previos
+    this.isLoading = true; // Mostrar indicador de carga
+
+    this.remoteService.login(this.username, this.password).subscribe({
+      next: (response) => {
+        console.log('Acceso correcto:', response);
+        localStorage.setItem('authToken', response.token); // Guarda el token,que viene desde el backend
+        this.router.navigate(['/tabs']); // Redirige a los tabs
+      },
+      error: (error) => {
+        console.error('Acceso incorrecto:', error);
+        this.errorMessage = 'Credenciales incorrectas. Intenta de nuevo.';
+      },
+      complete: () => {
+        this.isLoading = false; // Ocultar indicador de carga
+      },
+    });
+  }
 }
