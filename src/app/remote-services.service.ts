@@ -7,13 +7,13 @@ import { Observable } from 'rxjs';
 })
 export class RemoteServicesService {
 
-  private baseUrl = 'http://localhost:8100/' //URL de la API
+  private baseUrl = 'http://localhost:8100' //URL de la API
 
   constructor(private http: HttpClient) { }
 
   login(username: string, password:string): Observable<any> {
     const body = {username, password};
-    return this.http.post(`${this.baseUrl}/auth/login`, body); // OJO a donde está haciendo el POST
+    return this.http.post(`${this.baseUrl}/login`, body);
   }
 
 }

@@ -12,24 +12,38 @@ export class LoginPage implements OnInit {
   username: string = '';
   password: string = '';
   errorMessage: string = '';
+  isLoading: boolean = false;
   
   constructor(private remoteService: RemoteServicesService, private router: Router) { }
 
-  login(){
+  login(event:Event){
 
-    this.remoteService.login(this.username, this.password).subscribe(
+  event.preventDefault();//Evitar la recarga de la página
+  this.errorMessage = '';//Reinicia el mensaje de error
 
-      (response) => {
-        console.log('Acceso correcto:',response);
-        localStorage.setItem('authToken', response.token);//guarda el token, no se si es necesario
-        this.router.navigate(['/tabs']);// redirige al área principal
+  // Verificar que los campos no estén vacíos
+  if (!this.username || !this.password) {
+    this.errorMessage = 'Por favor, completa todos los campos.';
+    return;
+  }
+
+  // Reiniciar mensaje de error y mostrar indicador de carga
+  this.errorMessage = '';
+  this.isLoading = true;
+
+    this.remoteService.login(this.username, this.password).subscribe({
+      next: (response) =>{
+        localStorage.setItem('authToken', response.token);
+        this.router.navigate(['/tabs']);
       },
-      (error) => {
-        console.error('Acceso incorrecto:', error);
-        this.errorMessage = 'Credenciales incorrectas. Intenta de nuevo';
-      }
-
-    );
+      error: (error) =>{
+        this.errorMessage = 'Credenciales incorrectas';
+      },
+      complete: () =>{
+        console.log('Proceso de autenticación completado')
+      },
+      
+    });
 
   }
 
