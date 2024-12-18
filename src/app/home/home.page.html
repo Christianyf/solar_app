@@ -1,13 +1,109 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Home</ion-title>
+    <ion-title>Dashboard Solar</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">home</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <!-- Gráfico de Irradiancia vs Potencia -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Irradiancia vs Potencia (Última hora)</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <canvas id="irradianciaPotenciaChart"></canvas>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Información de temperaturas -->
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Temp. Panel 1</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-text color="primary">{{ temperaturaPanel1 }} °C</ion-text>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Temp. Panel 2</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-text color="primary">{{ temperaturaPanel2 }} °C</ion-text>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Temp. Nodo</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-text color="primary">{{ temperaturaNodo }} °C</ion-text>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Nivel de batería y RSSI -->
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Nivel de Batería</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-progress-bar [value]="bateriaNivel / 100"></ion-progress-bar>
+            <ion-text color="success">{{ bateriaNivel }}%</ion-text>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>RSSI</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-text>{{ rssiValor }} dBm</ion-text>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- Estados booleanos -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Estados del Sistema</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6" *ngFor="let estado of estadosBooleanos">
+            <ion-item>
+              <ion-label>{{ estado.nombre }}</ion-label>
+              <ion-toggle [checked]="estado.valor" disabled></ion-toggle>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Estado general del sistema -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Estado General</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-text>{{ estadoGeneral }}</ion-text>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
