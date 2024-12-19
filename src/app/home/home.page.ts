@@ -14,12 +14,12 @@ export class HomePage implements OnInit {
   bateriaNivel = 25; // En porcentaje
   rssiValor = -30; // En dBm
   estadosBooleanos = [
-    { nombre: 'Estado 1', valor: true },
-    { nombre: 'Estado 2', valor: false },
-    { nombre: 'Estado 3', valor: true },
-    { nombre: 'Estado 4', valor: true },
-    { nombre: 'Estado 5', valor: false },
-    { nombre: 'Estado 6', valor: true },
+    { nombre: 'Conexión de batería', valor: true },
+    { nombre: 'Conexión de inverter', valor: false },
+    { nombre: 'Conexión ESP32', valor: true },
+    { nombre: 'Estado conversor', valor: true },
+    { nombre: 'Estado cargador', valor: true },
+    { nombre: 'Timeout', valor: false },
   ];
   estadoGeneral = 'On Grid';
 

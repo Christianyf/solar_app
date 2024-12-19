@@ -97,16 +97,17 @@
   <!-- Estados booleanos -->
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Estados del Sistema</ion-card-title>
+      <ion-card-title>Estados del sistema</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-grid>
         <ion-row>
           <ion-col size="6" *ngFor="let estado of estadosBooleanos">
-            <ion-item>
-              <ion-label>{{ estado.nombre }}</ion-label>
-              <ion-toggle [checked]="estado.valor" disabled></ion-toggle>
-            </ion-item>
+            <div class="estado-container">
+              <ion-icon [name]="estado.valor ? 'checkmark-circle' : 'close-circle'" 
+                        [color]="estado.valor ? 'success' : 'danger'"></ion-icon>
+              <ion-label> {{ estado.nombre }}</ion-label>
+            </div>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -116,7 +117,7 @@
   <!-- Estado general del sistema -->
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Estado General</ion-card-title>
+      <ion-card-title>Estado del inverter</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-text>{{ estadoGeneral }}</ion-text>
