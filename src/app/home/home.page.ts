@@ -11,8 +11,8 @@ export class HomePage implements OnInit {
   temperaturaPanel1 = 30;
   temperaturaPanel2 = 28;
   temperaturaNodo = 10;
-  bateriaNivel = 75; // En porcentaje
-  rssiValor = -60; // En dBm
+  bateriaNivel = 25; // En porcentaje
+  rssiValor = -30; // En dBm
   estadosBooleanos = [
     { nombre: 'Estado 1', valor: true },
     { nombre: 'Estado 2', valor: false },
@@ -32,6 +32,17 @@ export class HomePage implements OnInit {
   ngOnInit() {
     this.crearGrafico();
   }
+
+  getRssiStyle(rssi: number) {
+    if (rssi > -50) {
+      return { backgroundColor: 'green' }; // Señal fuerte
+    } else if (rssi > -70) {
+      return { backgroundColor: 'yellow' }; // Señal media
+    } else {
+      return { backgroundColor: 'red' }; // Señal débil
+    }
+  }
+  
 
   crearGrafico() {
     const canvas = document.getElementById('irradianciaPotenciaChart') as HTMLCanvasElement | null;

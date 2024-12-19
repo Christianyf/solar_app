@@ -69,7 +69,11 @@
             <ion-card-title>Nivel de Batería</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <ion-progress-bar [value]="bateriaNivel / 100"></ion-progress-bar>
+            <div class="battery-container">
+              <div class="battery">
+                <div class="battery-level" [style.width]="bateriaNivel + '%'"></div>
+              </div>
+            </div>
             <ion-text color="success">{{ bateriaNivel }}%</ion-text>
           </ion-card-content>
         </ion-card>
@@ -80,6 +84,9 @@
             <ion-card-title>RSSI</ion-card-title>
           </ion-card-header>
           <ion-card-content>
+            <div class="rssi-container">
+              <div class="rssi-indicator" [ngStyle]="getRssiStyle(rssiValor)"></div>
+            </div>
             <ion-text>{{ rssiValor }} dBm</ion-text>
           </ion-card-content>
         </ion-card>
