@@ -61,7 +61,7 @@
 
 
   <!-- Nivel de batería y RSSI -->
-  <ion-grid>
+  <ion-grid class="custom-card-grid">
     <ion-row>
       <ion-col>
         <ion-card>
@@ -120,7 +120,9 @@
       <ion-card-title>Estado del inverter</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-text>{{ estadoGeneral }}</ion-text>
+      <div class="lcd-screen">
+        <span class="lcd-text">{{ estadoGeneral }}</span>
+      </div>
     </ion-card-content>
   </ion-card>
 </ion-content>
