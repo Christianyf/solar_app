@@ -10,7 +10,7 @@ export class HomePage implements OnInit {
   // Datos simulados (estos deben venir del backend)
   temperaturaPanel1 = 30;
   temperaturaPanel2 = 28;
-  temperaturaNodo = 35;
+  temperaturaNodo = 10;
   bateriaNivel = 75; // En porcentaje
   rssiValor = -60; // En dBm
   estadosBooleanos = [

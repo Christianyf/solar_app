@@ -14,15 +14,18 @@
     </ion-card-content>
   </ion-card>
 
-  <!-- Información de temperaturas -->
+  <!-- Información de temperaturas con termómetros visuales -->
   <ion-grid>
     <ion-row>
       <ion-col>
         <ion-card>
           <ion-card-header>
-            <ion-card-title>Temp. Panel 1</ion-card-title>
+            <ion-card-title>Temperatura del panel 1</ion-card-title>
           </ion-card-header>
           <ion-card-content>
+            <div class="thermometer">
+              <div class="mercury" [style.height.%]="temperaturaPanel1 * 2"></div>
+            </div>
             <ion-text color="primary">{{ temperaturaPanel1 }} °C</ion-text>
           </ion-card-content>
         </ion-card>
@@ -30,9 +33,12 @@
       <ion-col>
         <ion-card>
           <ion-card-header>
-            <ion-card-title>Temp. Panel 2</ion-card-title>
+            <ion-card-title>Temperatura del panel 2</ion-card-title>
           </ion-card-header>
           <ion-card-content>
+            <div class="thermometer">
+              <div class="mercury" [style.height.%]="temperaturaPanel2 * 2"></div>
+            </div>
             <ion-text color="primary">{{ temperaturaPanel2 }} °C</ion-text>
           </ion-card-content>
         </ion-card>
@@ -40,15 +46,19 @@
       <ion-col>
         <ion-card>
           <ion-card-header>
-            <ion-card-title>Temp. Nodo</ion-card-title>
+            <ion-card-title>Temperatura del nodo</ion-card-title>
           </ion-card-header>
           <ion-card-content>
+            <div class="thermometer">
+              <div class="mercury" [style.height.%]="temperaturaNodo * 2"></div>
+            </div>
             <ion-text color="primary">{{ temperaturaNodo }} °C</ion-text>
           </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
+
 
   <!-- Nivel de batería y RSSI -->
   <ion-grid>
