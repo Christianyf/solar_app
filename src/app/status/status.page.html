@@ -1,11 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button href="/dashboard">
-        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      <ion-button href="/login">
+        <ion-icon slot="icon-only" name="person"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Estado del Sistema</ion-title>
+    <ion-title>Estado del sistema</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -77,12 +77,21 @@
     <ion-card-content>
       <ion-grid>
         <ion-row>
-          <ion-col size="6" *ngFor="let estado of estadosBooleanos">
-            <div class="estado-container">
-              <ion-icon [name]="estado.valor ? 'checkmark-circle' : 'close-circle'" 
-                        [color]="estado.valor ? 'success' : 'danger'"></ion-icon>
-              <ion-label> {{ estado.nombre }}</ion-label>
-            </div>
+          <!-- Representación de cada estado -->
+          <ion-col size="12" *ngFor="let estado of estadosBooleanos">
+            <ion-card class="estado-card" [ngClass]="{ 'estado-activo': estado.valor, 'estado-inactivo': !estado.valor }">
+              <ion-card-content class="estado-card-content">
+                <ion-icon [name]="estado.valor ? 'checkmark-circle' : 'close-circle'" 
+                          [color]="estado.valor ? 'success' : 'danger'" 
+                          class="estado-icon"></ion-icon>
+                <div class="estado-text">
+                  <ion-label class="estado-nombre">{{ estado.nombre }}</ion-label>
+                  <ion-label class="estado-status" [color]="estado.valor ? 'success' : 'danger'">
+                    {{ estado.valor ? 'Activo' : 'Inactivo' }}
+                  </ion-label>
+                </div>
+              </ion-card-content>
+            </ion-card>
           </ion-col>
         </ion-row>
       </ion-grid>
