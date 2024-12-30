@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { AuthGuard } from '../auth.guard';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
       {
         path:'settings',
         loadChildren: () => import('../settings/settings.module').then(m => m.SettingsPageModule),
+        canActivate:[AuthGuard],//se aplica el guard para verificar el rol de usuario
       },
       {
         path: '',

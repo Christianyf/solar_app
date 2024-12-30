@@ -38,7 +38,7 @@ export class LoginPage implements OnInit {
     this.remoteService.login(this.username, this.password).subscribe({
       next: (response) => {
         console.log('Acceso correcto:', response);
-        localStorage.setItem('authToken', response.token); // Guarda el token,que viene desde el backend
+        localStorage.setItem('userRole', response.user.role); // Guarda el rol de usuario,que viene desde el backend
         this.router.navigate(['/tabs']); // Redirige a los tabs
       },
       error: (error) => {
