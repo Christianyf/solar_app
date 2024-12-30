@@ -16,8 +16,8 @@ const routes: Routes = [
         loadChildren: () => import('../status/status.module').then(m => m.StatusPageModule),
       },
       {
-        path: 'history',
-        loadChildren: () => import('../history/history.module').then(m => m.HistoryPageModule),
+        path:'settings',
+        loadChildren: () => import('../settings/settings.module').then(m => m.SettingsPageModule),
       },
       {
         path: '',
