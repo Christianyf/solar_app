@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-settings',
@@ -49,10 +50,61 @@ export class SettingsPage implements OnInit {
   editingIndex = -1; // Índice del usuario en edición
 
 
-  constructor() {}
+  constructor(private alertController: AlertController) {}
 
   ngOnInit() {}
 
+  async confirmDeleteUser(index: number) {
+    const alert = await this.alertController.create({
+      header: 'Confirmar Eliminación',
+      message: '¿Estás seguro de que deseas eliminar este usuario?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Eliminación cancelada');
+          },
+        },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: () => {
+            this.removeUser(index);
+          },
+        },
+      ],
+    });
+  
+    await alert.present();
+  }
+  
+  async confirmSaveChanges() {
+    const alert = await this.alertController.create({
+      header: 'Confirmar Cambios',
+      message: '¿Deseas guardar los cambios realizados al usuario?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Guardado cancelado');
+          },
+        },
+        {
+          text: 'Guardar',
+          handler: () => {
+            if (this.editingIndex !== -1) {
+              this.users[this.editingIndex] = { ...this.newUser };
+              this.cancelEdit(); // Salir del modo de edición
+            }
+          },
+        },
+      ],
+    });
+  
+    await alert.present();
+  }
   // Método para agregar un usuario
   addUser() {
     if (this.newUser.username.trim()) {

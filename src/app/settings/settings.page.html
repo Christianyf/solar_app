@@ -97,7 +97,7 @@
               <ion-button color="secondary" (click)="editUser(user, i)">
                 <ion-icon slot="start" name="create-outline"></ion-icon> Editar
               </ion-button>
-              <ion-button color="danger" (click)="removeUser(i)">
+              <ion-button color="danger" (click)="confirmDeleteUser(i)">
                 <ion-icon slot="start" name="trash-outline"></ion-icon> Eliminar
               </ion-button>
             </ion-item>
@@ -123,9 +123,9 @@
                 <ion-select-option value="user">Usuario</ion-select-option>
               </ion-select>
             </ion-item>
-            <ion-button expand="block" type="submit" color="primary" [disabled]="!newUser.username || !newUser.role">
+            <ion-button expand="block" color="primary" (click)="confirmSaveChanges()" [disabled]="!newUser.username || !newUser.role">
               <ion-icon slot="start" name="save-outline"></ion-icon> Guardar Cambios
-            </ion-button>
+            </ion-button>            
             <ion-button expand="block" color="medium" (click)="cancelEdit()">
               <ion-icon slot="start" name="arrow-back-outline"></ion-icon> Cancelar
             </ion-button>
