@@ -16,10 +16,38 @@ export class SettingsPage implements OnInit {
   newUser: { username: string; role: string } = { username: '', role: 'usuario' };
 
   // Datos históricos simulados
-  historicalData: { date: string; data: string }[] = [
-    { date: '2024-12-25 14:00', data: 'Irradiancia: 1234, Temperatura: 25°C' },
-    { date: '2024-12-25 15:00', data: 'Irradiancia: 1200, Temperatura: 24°C' },
+  historicalData = [
+    {
+      fechaHora: '2024-12-26 14:30',
+      irradiancia: 1234,
+      potencia: 500,
+      tempPanel1: 35,
+      tempPanel2: 34,
+      tempGabinete: 28,
+      rssi: -55,
+      bateria: 85,
+      estadoSistema: 'OK',
+      estadoInverter: 'On',
+    },
+    {
+      fechaHora: '2024-12-26 14:00',
+      irradiancia: 1200,
+      potencia: 480,
+      tempPanel1: 36,
+      tempPanel2: 33,
+      tempGabinete: 29,
+      rssi: -58,
+      bateria: 82,
+      estadoSistema: 'Warning',
+      estadoInverter: 'Off',
+    },
+    // Agregar más datos simulados o cargar dinámicamente del backend.
   ];
+
+  //newUser = { username: '', role: '' };
+  isEditing = false; // Indica si se está editando un usuario
+  editingIndex = -1; // Índice del usuario en edición
+
 
   constructor() {}
 
@@ -39,4 +67,69 @@ export class SettingsPage implements OnInit {
   removeUser(index: number) {
     this.users.splice(index, 1);
   }
+
+  editUser(user: any, index: number) {
+    // Activa el modo de edición
+    this.isEditing = true;
+    this.editingIndex = index;
+    this.newUser = { ...user }; // Carga los datos del usuario a editar
+  }
+  
+  saveEditedUser() {
+    if (this.editingIndex !== -1) {
+      // Actualiza los datos del usuario
+      this.users[this.editingIndex] = { ...this.newUser };
+      this.cancelEdit(); // Salir del modo de edición
+    }
+  }
+  
+  cancelEdit() {
+    // Resetea el formulario y desactiva el modo de edición
+    this.isEditing = false;
+    this.editingIndex = -1;
+    this.newUser = { username: '', role: '' };
+  }
+  
+  
+  // Método para el botón de descarga del archivo en formato CSV
+  exportToCSV() {
+    const csvHeaders = [
+      'Fecha y Hora',
+      'Irradiancia (W/m²)',
+      'Potencia (W)',
+      'Temp. Panel 1 (°C)',
+      'Temp. Panel 2 (°C)',
+      'Temp. Gabinete (°C)',
+      'RSSI (dBm)',
+      'Batería (%)',
+      'Estado Sistema',
+      'Estado Inverter',
+    ];
+  
+    const rows = this.historicalData.map(row => [
+      row.fechaHora,
+      row.irradiancia,
+      row.potencia,
+      row.tempPanel1,
+      row.tempPanel2,
+      row.tempGabinete,
+      row.rssi,
+      row.bateria,
+      row.estadoSistema,
+      row.estadoInverter,
+    ]);
+  
+    const csvContent =
+      'data:text/csv;charset=utf-8,' +
+      [csvHeaders.join(','), ...rows.map(e => e.join(','))].join('\n');
+  
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'datos_historicos.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+  
 }
