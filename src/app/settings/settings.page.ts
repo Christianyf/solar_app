@@ -1,5 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { RemoteServicesService } from '../remote-services.service';
+
+interface HistoricalData {
+  fechaHora: string;
+  irradiancia: number;
+  potencia: number;
+  tempPanel1: number;
+  tempPanel2: number;
+  tempGabinete: number;
+  rssi: number;
+  bateria: number;
+  estadoSistema: string;
+  estadoInverter: string;
+}
 
 @Component({
   selector: 'app-settings',
@@ -7,52 +21,43 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./settings.page.scss'],
 })
 export class SettingsPage implements OnInit {
-  // Lista de usuarios
-  users: { username: string; role: string }[] = [
-    { username: 'admin', role: 'administrador' },
-    { username: 'user1', role: 'usuario' },
-  ];
-
-  // Objeto para nuevo usuario
+  users: { username: string; role: string }[] = [];
   newUser: { username: string; role: string } = { username: '', role: 'usuario' };
+  historicalData: HistoricalData[] = [];
+  isEditing = false;
+  editingIndex = -1;
 
-  // Datos históricos simulados
-  historicalData = [
-    {
-      fechaHora: '2024-12-26 14:30',
-      irradiancia: 1234,
-      potencia: 500,
-      tempPanel1: 35,
-      tempPanel2: 34,
-      tempGabinete: 28,
-      rssi: -55,
-      bateria: 85,
-      estadoSistema: 'OK',
-      estadoInverter: 'On',
-    },
-    {
-      fechaHora: '2024-12-26 14:00',
-      irradiancia: 1200,
-      potencia: 480,
-      tempPanel1: 36,
-      tempPanel2: 33,
-      tempGabinete: 29,
-      rssi: -58,
-      bateria: 82,
-      estadoSistema: 'Warning',
-      estadoInverter: 'Off',
-    },
-    // Agregar más datos simulados o cargar dinámicamente del backend.
-  ];
+  constructor(
+    private alertController: AlertController,
+    private remoteService: RemoteServicesService
+  ) {}
 
-  //newUser = { username: '', role: '' };
-  isEditing = false; // Indica si se está editando un usuario
-  editingIndex = -1; // Índice del usuario en edición
+  ngOnInit() {
+    this.loadUsers();
+    this.loadHistoricalData();
+  }
 
+  loadUsers() {
+    this.remoteService.getUsers().subscribe(
+      (data) => {
+        this.users = data;
+      },
+      (error) => {
+        console.error('Error al cargar usuarios:', error);
+      }
+    );
+  }
 
-  constructor(private alertController: AlertController) {}
-
-  ngOnInit() {}
+  loadHistoricalData() {
+    this.remoteService.getHistoricalData().subscribe(
+      (data) => {
+        this.historicalData = data;
+      },
+      (error) => {
+        console.error('Error al cargar datos históricos:', error);
+      }
+    );
+  }
 
   async confirmDeleteUser(index: number) {
     const alert = await this.alertController.create({

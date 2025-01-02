@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import Chart from 'chart.js/auto';
+import { RemoteServicesService } from '../remote-services.service';
 
 @Component({
   selector: 'app-home',
@@ -7,30 +8,32 @@ import Chart from 'chart.js/auto';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  // Datos simulados (estos deben venir del backend)
-  temperaturaPanel1 = 30;
-  temperaturaPanel2 = 28;
-  temperaturaNodo = 10;
-  bateriaNivel = 25; // En porcentaje
-  rssiValor = -30; // En dBm
-  estadosBooleanos = [
-    { nombre: 'Conexión de batería', valor: true },
-    { nombre: 'Conexión de inverter', valor: false },
-    { nombre: 'Conexión ESP32', valor: true },
-    { nombre: 'Estado conversor', valor: true },
-    { nombre: 'Estado cargador', valor: true },
-    { nombre: 'Timeout', valor: false },
-  ];
-  estadoGeneral = 'On Grid';
 
-  // Datos para el gráfico
-  irradianciaData = [100, 200, 300, 400, 500];
-  potenciaData = [50, 150, 250, 350, 450];
+  temperaturaPanel1!: number;
+  temperaturaPanel2!: number;
+  temperaturaNodo!: number;
+  bateriaNivel!: number;
+  rssiValor!: number;
+  estadosBooleanos!: any[];
+  estadoGeneral!: string;
+  irradianciaData!: number[];
+  potenciaData!: number[];
 
-  constructor() {}
+  constructor(private remoteService: RemoteServicesService) {}
 
   ngOnInit() {
-    this.crearGrafico();
+    this.remoteService.getHomeData().subscribe((data) => {
+      this.temperaturaPanel1 = data.temperaturaPanel1;
+      this.temperaturaPanel2 = data.temperaturaPanel2;
+      this.temperaturaNodo = data.temperaturaNodo;
+      this.bateriaNivel = data.bateriaNivel;
+      this.rssiValor = data.rssiValor;
+      this.estadosBooleanos = data.estadosBooleanos;
+      this.estadoGeneral = data.estadoGeneral;
+      this.irradianciaData = data.irradianciaData;
+      this.potenciaData = data.potenciaData;
+      this.crearGrafico();
+    });
   }
 
   getRssiStyle(rssi: number) {

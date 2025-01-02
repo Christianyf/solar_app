@@ -16,4 +16,21 @@ export class RemoteServicesService {
     return this.http.post(`${this.baseUrl}/login`, body);
   }
 
+  getHomeData(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/home`);
+  }
+
+  getStatusData(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/status`);
+  }
+
+  getUsers(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/users`);
+  }
+  
+  getHistoricalData(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/api/historical`);
+  }
+  
+
 }
