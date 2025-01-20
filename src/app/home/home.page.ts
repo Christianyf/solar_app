@@ -26,10 +26,10 @@ export class HomePage implements OnInit {
       this.temperaturaPanel1 = data.temperaturaPanel1;
       this.temperaturaPanel2 = data.temperaturaPanel2;
       this.temperaturaNodo = data.temperaturaNodo;
-      this.bateriaNivel = data.bateriaNivel;
-      this.rssiValor = data.rssiValor;
-      this.estadosBooleanos = data.estadosBooleanos;
-      this.estadoGeneral = data.estadoGeneral;
+      this.bateriaNivel = data.bateria;
+      this.rssiValor = data.rssi;
+      this.estadosBooleanos = data.estadosBooleanos; // Recibe los estados procesados
+      this.estadoGeneral = data.estadoInverter; // Estado del inverter procesado
       this.irradianciaData = data.irradianciaData;
       this.potenciaData = data.potenciaData;
       this.crearGrafico();
