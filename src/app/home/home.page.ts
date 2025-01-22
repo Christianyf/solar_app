@@ -22,6 +22,7 @@ export class HomePage implements OnInit {
   constructor(private remoteService: RemoteServicesService) {}
 
   ngOnInit() {
+    // Obtener datos del home
     this.remoteService.getHomeData().subscribe((data) => {
       this.temperaturaPanel1 = data.temperaturaPanel1;
       this.temperaturaPanel2 = data.temperaturaPanel2;
@@ -32,7 +33,20 @@ export class HomePage implements OnInit {
       this.estadoGeneral = data.estadoInverter; // Estado del inverter procesado
       this.irradianciaData = data.irradianciaData;
       this.potenciaData = data.potenciaData;
-      this.crearGrafico();
+  
+      // Llamada para los datos históricos del gráfico
+      this.remoteService.getLastHourData().subscribe((historicalData) => {
+        if (historicalData && historicalData.length > 0) {
+          const labels = historicalData.map((d) => new Date(d.timestamp).toLocaleTimeString());
+          const irradianciaValues = historicalData.map((d) => d.irradiancia);
+          const potenciaValues = historicalData.map((d) => d.potencia);
+  
+          // Crear gráfico con los datos históricos
+          this.crearGrafico(labels, irradianciaValues, potenciaValues);
+        } else {
+          console.error('No se encontraron datos históricos para el gráfico.');
+        }
+      });
     });
   }
 
@@ -47,7 +61,7 @@ export class HomePage implements OnInit {
   }
   
 
-  crearGrafico() {
+  crearGrafico(labels: string[], irradiancia: number[], potencia: number[]) {
     const canvas = document.getElementById('irradianciaPotenciaChart') as HTMLCanvasElement | null;
     if (canvas) {
       const ctx = canvas.getContext('2d');
@@ -55,11 +69,11 @@ export class HomePage implements OnInit {
         new Chart(ctx, {
           type: 'line',
           data: {
-            labels: ['-60 min', '-45 min', '-30 min', '-15 min', 'Ahora'], // Etiquetas del eje X
+            labels: labels, // Etiquetas del eje X
             datasets: [
               {
                 label: 'Irradiancia',
-                data: [100, 200, 300, 400, 500], // Datos de irradiancia (eje Y)
+                data: irradiancia, // Datos de irradiancia (eje Y)
                 borderColor: 'blue',
                 fill: false,
                 cubicInterpolationMode: 'monotone',
@@ -67,7 +81,7 @@ export class HomePage implements OnInit {
               },
               {
                 label: 'Potencia',
-                data: [50, 150, 250, 350, 450], // Datos de potencia (eje Y)
+                data: potencia, // Datos de potencia (eje Y)
                 borderColor: 'green',
                 fill: false,
               },

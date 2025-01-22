@@ -32,5 +32,10 @@ export class RemoteServicesService {
     return this.http.get(`${this.baseUrl}/api/historical`);
   }
   
+  getLastHourData() {
+    return this.http.get<{ timestamp: string, irradiancia: number, potencia: number }[]>(
+      `${this.baseUrl}/api/last-hour-data`
+    );
+  }
 
 }
