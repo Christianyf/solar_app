@@ -39,14 +39,18 @@ export class SettingsPage implements OnInit {
 
   loadUsers() {
     this.remoteService.getUsers().subscribe(
-      (data) => {
-        this.users = data;
+      (data: any[]) => { // Especificamos que data es un array de objetos
+        this.users = data.map((user: any) => ({ // Indicamos que user es de tipo any
+          username: user.nombre, // Renombrar 'nombre' a 'username'
+          role: user.rol // Renombrar 'rol' a 'role'
+        }));
       },
       (error) => {
         console.error('Error al cargar usuarios:', error);
       }
     );
   }
+  
 
   loadHistoricalData() {
     this.remoteService.getHistoricalData().subscribe(
