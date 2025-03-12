@@ -20,8 +20,8 @@ export class StatusPage implements OnInit {
 
   ngOnInit() {
     this.remoteService.getStatusData().subscribe((data) => {
-      this.estadosBooleanos = data.estadosBooleanos;
-      this.estadoGeneral = data.estadoGeneral;
+      this.estadosBooleanos = data.estadosSistema;
+      this.estadoGeneral = data.estadosInverter;
       this.irradiancia24h = data.irradiancia24h;
       this.potencia24h = data.potencia24h;
       this.temperaturasPanel1 = data.temperaturasPanel1;
@@ -35,6 +35,25 @@ export class StatusPage implements OnInit {
       this.crearGrafico('tempPanel2Chart', this.temperaturasPanel2, 'Temperatura Panel 2 (°C)');
       this.crearGrafico('tempNodoChart', this.temperaturasNodo, 'Temperatura Nodo (°C)');
     });
+  }
+  procesarEstados(estado: number): any[] {
+    const nombresEstados = [
+      'Carga/Descarga batería',
+      'Conexión inverter',
+      'Estado conversor',
+      'Estado cargador',
+      'Timeout',
+      'Estado ESP32',
+    ];
+    return nombresEstados.map((nombre, index) => ({
+      nombre,
+      valor: (estado >> (5 - index)) & 1,
+    }));
+  }
+
+  obtenerEstadoInverter(estado: number): string {
+    const estadosInverter = ['Detenido', 'Off-grid', 'Stand-by', 'On-grid'];
+    return estadosInverter[estado & 0b11]; // Extrae los dos bits menos significativos
   }
 
   crearGrafico(canvasId: string, data: number[], label: string) {
