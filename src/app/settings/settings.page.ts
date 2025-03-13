@@ -21,8 +21,8 @@ interface HistoricalData {
   styleUrls: ['./settings.page.scss'],
 })
 export class SettingsPage implements OnInit {
-  users: { username: string; role: string }[] = [];
-  newUser: { username: string; role: string } = { username: '', role: 'usuario' };
+  users: { username: string; role: string; password?: string }[] = [];
+  newUser: { username: string; role: string; password?: string } = { username: '', role: 'usuario', password: '' };
   historicalData: HistoricalData[] = [];
   isEditing = false;
   editingIndex = -1;
@@ -117,8 +117,14 @@ export class SettingsPage implements OnInit {
   // Método para agregar un usuario
   addUser() {
     if (this.newUser.username.trim()) {
+      if (this.newUser.role === 'admin') {
+        if (!this.newUser.password || this.newUser.password.trim() === '') {
+          console.error('La contraseña no puede estar vacía para usuarios administradores.');
+          return;
+        }
+      }
       this.users.push({ ...this.newUser });
-      this.newUser = { username: '', role: 'usuario' }; // Resetear el formulario
+      this.newUser = { username: '', role: 'usuario', password: '' }; // Resetear el formulario
     } else {
       console.error('El nombre de usuario no puede estar vacío.');
     }

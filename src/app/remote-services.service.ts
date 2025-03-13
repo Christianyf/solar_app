@@ -38,4 +38,12 @@ export class RemoteServicesService {
     );
   }
 
+  addUser(user: { username: string; role: string; password?: string }): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/api/users`, user);
+  }
+
+  updateUser(user: { username: string; role: string; password?: string }): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/api/users/${user.username}`, user);
+  }
+
 }
