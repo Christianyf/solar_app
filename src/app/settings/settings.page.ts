@@ -149,8 +149,19 @@ export class SettingsPage implements OnInit {
 
   // Método para eliminar un usuario
   removeUser(index: number) {
-    this.users.splice(index, 1);
+    const userId = this.users[index].id;
+    this.remoteService.deleteUser(userId).subscribe(
+      (response) => {
+        console.log('Usuario eliminado exitosamente');
+        // Elimina el usuario de la lista solo si la eliminación fue exitosa
+        this.users.splice(index, 1);
+      },
+      (error) => {
+        console.error('Error al eliminar usuario:', error);
+      }
+    );
   }
+  
 
   editUser(user: User, index: number) {
     this.isEditing = true;

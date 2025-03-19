@@ -47,5 +47,9 @@ export class RemoteServicesService {
       headers: { 'Content-Type': 'application/json' }
     });
   }
-
+  deleteUser(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/api/users/${id}`, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
 }
