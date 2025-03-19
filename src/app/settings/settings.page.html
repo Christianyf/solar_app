@@ -71,14 +71,14 @@
               <ion-label position="floating">Rol</ion-label>
               <ion-select [(ngModel)]="newUser.role" name="role" required>
                 <ion-select-option value="admin">Administrador</ion-select-option>
-                <ion-select-option value="user">Usuario</ion-select-option>
+                <ion-select-option value="usuario">Usuario</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item >
               <ion-label position="floating">Contraseña</ion-label>
               <ion-input type="password" [(ngModel)]="newUser.password" name="password" required></ion-input>
             </ion-item>
-            <ion-button expand="block" type="submit" color="primary" [disabled]="!newUser.username || !newUser.role">
+            <ion-button expand="block" type="submit" color="primary" [disabled]="!newUser.username || !newUser.role || !newUser.password">
               <ion-icon slot="start" name="add-circle"></ion-icon> Agregar Usuario
             </ion-button>
           </form>
@@ -124,7 +124,7 @@
               <ion-label position="floating">Rol</ion-label>
               <ion-select [(ngModel)]="newUser.role" name="editRole" required>
                 <ion-select-option value="admin">Administrador</ion-select-option>
-                <ion-select-option value="user">Usuario</ion-select-option>
+                <ion-select-option value="usuario">Usuario</ion-select-option>
               </ion-select>
             </ion-item>
             <ion-item>

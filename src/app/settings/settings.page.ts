@@ -15,14 +15,23 @@ interface HistoricalData {
   estadoInverter: string;
 }
 
+interface User {
+  id: number;
+  username: string;
+  role: string;
+  password?: string;
+}
+
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
 })
+
 export class SettingsPage implements OnInit {
-  users: { username: string; role: string; password?: string }[] = [];
-  newUser: { username: string; role: string; password?: string } = { username: '', role: 'usuario', password: '' };
+  //users: { id: number; username: string; role: string; password?: string }[] = [];
+  users: User[] = [];
+  newUser: { id?: number; username: string; role: string; password?: string } = { username: '', role: 'usuario', password: '' };
   historicalData: HistoricalData[] = [];
   isEditing = false;
   editingIndex = -1;
@@ -39,11 +48,13 @@ export class SettingsPage implements OnInit {
 
   loadUsers() {
     this.remoteService.getUsers().subscribe(
-      (data: any[]) => { // Especificamos que data es un array de objetos
-        this.users = data.map((user: any) => ({ // Indicamos que user es de tipo any
-          username: user.nombre, // Renombrar 'nombre' a 'username'
-          role: user.rol // Renombrar 'rol' a 'role'
+      (data: any[]) => {
+        this.users = data.map((user: any) => ({
+          id: user.id,
+          username: user.nombre, // 'nombre' de la base de datos se mapea a 'username'
+          role: user.rol, // 'rol' de la base de datos se mapea a 'role'
         }));
+        console.log('Usuarios cargados:', this.users);
       },
       (error) => {
         console.error('Error al cargar usuarios:', error);
@@ -104,8 +115,7 @@ export class SettingsPage implements OnInit {
           text: 'Guardar',
           handler: () => {
             if (this.editingIndex !== -1) {
-              this.users[this.editingIndex] = { ...this.newUser };
-              this.cancelEdit(); // Salir del modo de edición
+              this.saveEditedUser();
             }
           },
         },
@@ -123,8 +133,15 @@ export class SettingsPage implements OnInit {
           return;
         }
       }
-      this.users.push({ ...this.newUser });
-      this.newUser = { username: '', role: 'usuario', password: '' }; // Resetear el formulario
+      this.remoteService.addUser(this.newUser).subscribe(
+        (response) => {
+          this.users.push({ ...this.newUser, id: response.id }); // Asume que el backend devuelve el id
+          this.newUser = { username: '', role: 'usuario', password: '' };
+        },
+        (error) => {
+          console.error('Error al agregar usuario:', error);
+        }
+      );
     } else {
       console.error('El nombre de usuario no puede estar vacío.');
     }
@@ -135,20 +152,39 @@ export class SettingsPage implements OnInit {
     this.users.splice(index, 1);
   }
 
-  editUser(user: any, index: number) {
-    // Activa el modo de edición
+  editUser(user: User, index: number) {
     this.isEditing = true;
     this.editingIndex = index;
     this.newUser = { ...user }; // Carga los datos del usuario a editar
   }
   
   saveEditedUser() {
-    if (this.editingIndex !== -1) {
-      // Actualiza los datos del usuario
-      this.users[this.editingIndex] = { ...this.newUser };
-      this.cancelEdit(); // Salir del modo de edición
+    if (this.editingIndex !== -1 && this.newUser.id !== undefined) {
+      const userData: any = {
+        username: this.newUser.username,
+        role: this.newUser.role,
+      };
+  
+      if (this.newUser.password && this.newUser.password.trim() !== '') {
+        userData.password = this.newUser.password;
+      }
+  
+      this.remoteService.updateUser(this.newUser.id, userData).subscribe(
+        (response) => {
+          this.users[this.editingIndex] = { ...this.newUser, id: this.newUser.id! };
+          this.cancelEdit();
+        },
+        (error) => {
+          console.error('Error al actualizar usuario:', error);
+        }
+      );
+    } else {
+      console.error('Error: El usuario no tiene un ID válido.');
     }
   }
+  
+  
+  
   
   cancelEdit() {
     // Resetea el formulario y desactiva el modo de edición
