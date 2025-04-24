@@ -11,6 +11,10 @@ RUN npm run build --prod
 
 # Etapa 2: Servir la aplicación con nginx
 FROM nginx:alpine
+
+# Copiamos nuestra configuración personalizada
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+
 # Copiamos los archivos compilados al directorio que usa nginx para servir contenido *******
 COPY --from=build /app/www /usr/share/nginx/html
 EXPOSE 80
